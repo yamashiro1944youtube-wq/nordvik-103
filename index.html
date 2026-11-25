@@ -1,0 +1,1098 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>ノルドヴィーク戦記 ―103高地攻防戦―</title>
+<style>
+:root{
+--bg:#e9e6da; --panel:#f5f2e8; --panel2:#efeadd; --ink:#23241d; --ink2:#5a5c4e;
+--line:#b9b39c; --accent:#7a2e1d; --accent2:#1f4d5a; --gold:#9a7b2d;
+--atk:#8c2f1b; --def:#1e4f66; --ok:#3d6b35; --warn:#a3541a;
+--btn:#2e2f26; --btnink:#f2eedd;
+}
+@media (prefers-color-scheme: dark){
+:root{ --bg:#171812; --panel:#22231c; --panel2:#282920; --ink:#e8e4d2; --ink2:#a9ab97;
+--line:#4a4c3e; --accent:#d08a6d; --accent2:#7fb3c2; --gold:#c8a44e;
+--atk:#e0785a; --def:#7fb3c2; --btn:#e8e4d2; --btnink:#22231c;}
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;font-size:15px;line-height:1.55}
+button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2.25rem}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:6px;padding:.35rem.7rem}
+button:hover{filter:brightness(1.06)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.primary{background:var(--btn);color:var(--btnink);border-color:var(--btn);font-weight:700}
+button.danger{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+button.active{background:var(--gold);color:#1c1c14;border-color:var(--gold);font-weight:700}
+h1,h2,h3{font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,serif;line-height:1.3}
+.wrap{max-width:1440px;margin:0 auto;padding:10px}
+.topbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border-bottom:2px solid var(--ink);padding:6px 2px 10px}
+.topbar.ttl{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-weight:700;font-size:clamp(17px,2.6vw,24px);letter-spacing:.02em}
+.topbar.ttl small{display:block;font-size:11px;color:var(--ink2);letter-spacing:.14em;font-family:inherit}
+.statuschips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600;white-space:nowrap}
+.chip.day{background:#e8d9a0;color:#4a3a08;border-color:#c9ae54}
+.chip.night{background:#2c3350;color:#dfe4ff;border-color:#2c3350}
+.chip.raid{background:#3d2b5c;color:#ffe9a8;border-color:#6b5299;font-weight:700}
+@media (prefers-color-scheme: dark){.chip.day{background:#57491c;color:#f0df9e}}
+.layout{display:flex;gap:12px;margin-top:12px;align-items:flex-start}
+.mapcol{flex:1 1 auto;min-width:0}
+.sidecol{flex:0 0 348px;width:348px;display:flex;flex-direction:column;gap:10px}
+@media (max-width:900px){.layout{flex-direction:column}.sidecol{flex:1 1 auto;width:100%}}
+.mapbox{background:#3a4034;border:1px solid var(--line);border-radius:8px;overflow:auto;max-height:78vh;position:relative}
+.mapbox svg{display:block}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.panel h3{margin:2px 0 8px;font-size:15px;border-bottom:1px solid var(--line);padding-bottom:5px}
+.panel h3.sub{font-size:11px;color:var(--ink2);font-family:inherit}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:2px 0}
+.kv b{font-variant-numeric:tabular-nums}
+.bar{height:8px;background:rgba(120,120,100,.3);border-radius:4px;overflow:hidden;margin:2px 0 6px}
+.bar>i{display:block;height:100%}
+.mini{font-size:12px;color:var(--ink2)}
+.btnrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.btnrow button{flex:1 1 auto;min-width:96px}
+.log{height:230px;overflow-y:auto;font-size:12.5px;line-height:1.6;padding-right:4px}
+.log div{border-bottom:1px dotted var(--line);padding:3px 0}
+.log.hd{font-weight:700;color:var(--accent)}
+.log.good{color:var(--ok);font-weight:600}
+.log.bad{color:var(--accent);font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{border:1px solid var(--line);padding:4px 6px;text-align:left;vertical-align:top}
+th{background:var(--panel2)}
+.overlay{position:fixed;inset:0;background:rgba(12,13,9,.72);display:flex;align-items:center;justify-content:center;z-index:50;padding:14px;overflow-y:auto}
+.sheet{background:var(--panel);color:var(--ink);max-width:860px;width:100%;border-radius:10px;border:2px solid var(--ink);padding:22px clamp(16px,4vw,34px);max-height:92vh;overflow-y:auto}
+.sheet h1{font-size:clamp(22px,4.5vw,34px);margin:4px 0 6px}
+.sheet h2{font-size:18px;margin:18px 0 6px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.sidecards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media (max-width:640px){.sidecards{grid-template-columns:1fr}}
+.sidecard{border:2px solid var(--line);border-radius:8px;padding:14px;text-align:left;background:var(--panel2);width:100%;height:100%}
+.sidecard:hover{border-color:var(--gold)}
+.sidecard h3{margin:0 0 6px;font-size:17px}
+.sidecard.atk h3{color:var(--atk)}.sidecard.dfc h3{color:var(--def)}
+.tag{display:inline-block;font-size:11px;font-weight:700;border:1px solid currentColor;border-radius:999px;padding:1px 8px;margin-bottom:6px}
+.hidden{display:none!important}
+.legend{display:flex;flex-wrap:wrap;gap:5px 12px;font-size:12px;margin-top:8px;color:var(--ink)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.35);display:inline-block}
+.unitname{font-weight:700;font-size:15px}
+.badge{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;margin-left:4px;vertical-align:1px}
+.badge.warn{background:#a3541a;color:#fff}.badge.blind{background:#4a2d6b;color:#fff}.badge.stop{background:#6b2d2d;color:#fff}.badge.rout{background:#555;color:#fff}
+select{font:inherit;padding:.3rem.5rem;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+.footer{margin:14px 2px 4px;font-size:12px;color:var(--ink2)}
+.modehint{font-size:12.5px;background:var(--panel2);border:1px dashed var(--line);border-radius:6px;padding:6px 9px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="topbar">
+<div class="ttl">ノルドヴィーク戦記 ―103高地攻防戦―<small>第五次ノルドヴィーク攻勢 ／ 1945年10月7日―13日</small></div>
+<div class="statuschips" id="statusChips"></div>
+</div>
+
+<div class="btnrow" style="margin:10px 0 0" role="group" aria-label="主要コマンド">
+<button class="primary" data-act="end">ターン終了 ▶</button>
+<button data-act="rules">ルール・地形表</button>
+<button data-act="naval">🚢 艦砲支援（残 <span class="navalLeft">2</span>）</button>
+<button data-act="tunnel">トンネル表示 切替</button>
+<button id="btnBgm" class="active" aria-pressed="true">♪ BGM：入</button>
+<button id="btnSe" class="active" aria-pressed="true">🔊 SE：入</button>
+<span class="chip" id="bgmChip">♪ BGM ― 陣営選択後に開始</span>
+</div>
+<div class="layout">
+<div class="mapcol">
+<div class="mapbox" id="mapBox"></div>
+<div class="legend" id="legend"></div>
+<div class="modehint" id="modeHint">ユニットをクリック／タップして選択。ハイライトされたヘクスへ移動、射程内の敵をクリックで攻撃します。</div>
+</div>
+<div class="sidecol">
+<div class="panel">
+<h3>指揮 <span class="sub">COMMAND</span></h3>
+<div class="btnrow" style="margin-top:0">
+<button class="primary" data-act="end">ターン終了 ▶</button>
+<button data-act="rules">ルール・地形表</button>
+</div>
+<div class="btnrow">
+<button data-act="naval">🚢 艦砲支援（残 <span class="navalLeft">2</span>）</button>
+<button data-act="tunnel">トンネル表示 切替</button>
+</div>
+<div class="btnrow">
+<button data-act="restart">最初から</button>
+<button id="btnContinue" class="hidden">長期戦を継続（第2週へ）</button>
+</div>
+<div class="mini" id="cmdNote" style="margin-top:6px"></div>
+</div>
+
+<div class="panel" id="selPanel">
+<h3>選択ユニット <span class="sub">UNIT</span></h3>
+<div id="selBody"><p class="mini">自軍ユニットを選択してください。ヘクスをクリックすると地形情報も表示されます。</p></div>
+</div>
+
+<div class="panel">
+<h3>戦況 <span class="sub">SITUATION</span></h3>
+<div id="sitBody"></div>
+</div>
+
+<div class="panel">
+<h3>戦闘記録 <span class="sub">LOG</span></h3>
+<div class="log" id="log"></div>
+</div>
+</div>
+</div>
+<p class="footer">史実経過：10月7日 大準備砲撃 ― 8～9日 白兵戦激化 ― 10日 戦車投入 ― 13日 ペチェク大将、攻勢中止を決断。史実損害 ネスメルソン 死傷約10,300～12,600・戦車40～60両戦列離脱／守備側 死傷約4,500～5,800。</p>
+</div>
+
+<!-- 陣営選択 -->
+<div class="overlay" id="startOverlay">
+<div class="sheet">
+<div class="mini" style="letter-spacing:.2em">NORDOVIK WAR CHRONICLE ― HEIGHT 103</div>
+<h1>ノルドヴィーク戦記<br>―103高地攻防戦―</h1>
+<p>1945年10月7日。126高地を奪ったネスメルソン北部軍集団は、その北方の<strong>103高地</strong>に矛先を向けた。標高こそ低いが、この高地を抜けばノルドヴィーク市街と港湾は目と鼻の先である。</p>
+<p>守るのは第14・第15婦女子戦闘師団の残存部隊、約5,000～6,000名。主陣地は126高地から見えない<strong>北側の反斜面</strong>に築かれ、港には軽巡《スヴァルテルヴァ》《イェルンエルヴァ》の艦砲が控える。攻めるのは第4・第6歩兵師団、実働24,000～28,000名。10月10日には戦車70～100両が投入される。</p>
+<p><strong>14ターン＝7日間</strong>（昼／夜ターン制）。どちらの陣営で戦いますか。相手陣営はAIが指揮します。</p>
+<div class="sidecards">
+<button class="sidecard atk" id="pickAtk">
+<span class="tag" style="color:var(--atk)">攻勢側 ― OFFENSE</span>
+<h3>ネスメルソン北部軍集団</h3>
+<p class="mini" style="color:var(--ink)">第2軍団（第4・第6歩兵師団）＋砲兵連隊＋第2機甲師団抽出戦車隊。兵力・火力で圧倒するが、反斜面陣地は砲撃が届かない。7日以内に<strong>山頂＋反斜面主陣地＋トンネル入口2か所以上</strong>を制圧せよ。</p>
+<p class="mini">難易度：★★☆☆☆（物量戦）</p>
+</button>
+<button class="sidecard dfc" id="pickDef">
+<span class="tag" style="color:var(--def)">守備側 ― DEFENSE</span>
+<h3>リクショール・ノルドヴィーク海軍政府軍</h3>
+<p class="mini" style="color:var(--ink)">婦女子戦闘師団＋狙撃班＋対戦車砲兵＋海兵隊。兵力は劣勢だが、地形・トンネル・艦砲が味方する。13日終了時点で<strong>反斜面主陣地を1ヘクスでも保持</strong>すれば勝利。</p>
+<p class="mini">難易度：★★★★☆（守り切る戦い）</p>
+</button>
+</div>
+<p class="mini" style="margin-top:14px">操作：ユニット選択 → 移動範囲クリックで移動 → 射程内の敵クリックで射撃。隣接時は詳細パネルから「白兵戦」「肉薄攻撃（対戦車）」を選べます。夜ターンには🌙夜襲ボーナス（白兵×1.5・近接射撃×1.3・肉薄成功率68%）が発動します。詳しくはゲーム内の「ルール・地形表」を参照。</p>
+<p class="mini">🎵 音楽・効果音：BGMはネスメルソン陣営＝「抜刀隊」、リクショール陣営＝「カチューシャ」（いずれもシンセサイザー演奏）。効果音は射撃＝銃声、白兵戦＝剣戟音、砲兵・艦砲射撃＝砲撃音、肉薄攻撃＝突撃ラッパ。音声はブラウザの仕様上、陣営を選んだ瞬間から再生が始まります。上部のボタンで BGM／SE を個別に入・切できます。</p>
+</div>
+</div>
+
+<!-- ルール -->
+<div class="overlay hidden" id="rulesOverlay">
+<div class="sheet">
+<h1 style="font-size:24px">ルール・地形効果表</h1>
+<h2>地形効果</h2>
+<table>
+<tr><th>地形</th><th>防御</th><th>移動</th><th>特記</th></tr>
+<tr><td>平地</td><td>0%</td><td>1</td><td>砲撃・艦砲に弱い</td></tr>
+<tr><td>森林</td><td>+20%</td><td>2</td><td>射撃の射程-1を受ける側に有利。夜間は隠蔽+</td></tr>
+<tr><td>岩場</td><td>+30%</td><td>2</td><td>白兵戦で守備側（リクショール）に補正</td></tr>
+<tr><td>山頂（103高地）</td><td>+10%</td><td>2</td><td>視界全開。だが保持すると艦砲の的になる</td></tr>
+<tr><td>南斜面</td><td>-10%</td><td>2</td><td>126高地からの準備砲撃をまともに受ける</td></tr>
+<tr><td><strong>反斜面</strong></td><td><strong>+40%</strong></td><td>2</td><td><strong>間接砲撃ダメージ-70%</strong>。126高地から直接観測不可。103高地の核心</td></tr>
+<tr><td>塹壕・岩盤壕</td><td>+50%</td><td>1</td><td>白兵戦でのみ防御が半減する</td></tr>
+<tr><td>街道</td><td>-20%</td><td>0.5</td><td>戦車向き。地雷・対戦車砲に弱い</td></tr>
+<tr><td>市街・港湾</td><td>+25%</td><td>1</td><td>守備側の補給源。港ヘクスを奪われると艦を失う</td></tr>
+<tr><td>126高地</td><td>+15%</td><td>2</td><td>攻勢側の砲兵陣地・出発点</td></tr>
+<tr><td>トンネル内（入口間移動）</td><td>砲撃無効</td><td>1</td><td>入口に立つ守備側ユニットは他入口へ移動可。入口を敵に取られると封鎖。夜間移動に最適</td></tr>
+</table>
+<h2>戦闘</h2>
+<p><strong>射撃戦</strong>：射程内の敵をクリック。地形防御をまともに受ける。夜間は射程-1。</p>
+<p><strong>白兵戦</strong>：隣接ヘクスでのみ可能。防御側の地形ボーナスを半分無効化して大損害を与えるが、仕掛けた部隊はそのターン<strong>無防備</strong>となり、他の敵からの射撃ダメージが1.5倍になる。婦女子戦闘隊は数値こそ低いが、塹壕・岩場・トンネル入口では地形適性で補正が反転する。</p>
+<p><strong>肉薄攻撃（対戦車白兵）</strong>：歩兵が隣接する戦車にのみ可能。仕掛けた歩兵は通常40～60%の損害を受けるが、成功すると戦車は撃破ではなく<strong>「足止め（1～2ターン移動不可）＋盲目」</strong>となる。成形炸薬式対戦車爆雷による接近攻撃。</p>
+<p><strong>🌙 夜襲ボーナス（夜ターンのみ）</strong>：闇に紛れて接近できるため、近接系の戦闘が全面的に強化される。<strong>白兵戦：ダメージ×1.5、受ける反撃ダメージ×0.7</strong>。／<strong>近接射撃（距離1の射撃）：ダメージ×1.3、命中+10%</strong>。／<strong>肉薄攻撃：成功率 48%→68%、自軍損害 40～60%→25～40%、戦車への損害増（18%→26%）</strong>。両軍とも対象で、AIも夜は白兵・肉薄を優先して仕掛けてくる。戦闘ログにも「🌙夜襲」が表示される。</p>
+<p><strong>盲目</strong>：射程・命中が激減した状態。狙撃班の「戦車長・観測装置狙撃」でも付与できる。随伴歩兵（隣接する自軍歩兵）がいないと回復しない――戦車と歩兵の分離こそが守備側の狙い。</p>
+<p><strong>狙撃班</strong>：射程3。兵力ダメージは小さいが「殺すより戦闘から外す」方針で指揮官・通信兵を狙い、敵の<strong>士気</strong>を大きく削る。対戦車では盲目を付与。</p>
+<p><strong>対戦車砲／パックフロント</strong>：西側街道に集中配置された対戦車砲は、味方対戦車砲が隣接していると集中射撃ボーナスを得る。街道上の戦車は防御-20%で特に脆い。</p>
+<p><strong>砲兵（間接砲撃）</strong>：射程8。反斜面には-70%、夜間は精度-50%。</p>
+<p><strong>艦砲支援</strong>：軽巡2隻。守備側が<strong>1日2回まで</strong>使用可能。山頂稜線を越えた（山頂以北・山頂上の）敵には高精度、それ以外は精度低下。港ヘクスを制圧されると艦を失う。</p>
+<h2>士気・潰走</h2>
+<p>各ユニットは兵力HP／士気／弾薬／疲労／制圧を持つ。士気が崩壊するとHPが残っていても<strong>潰走</strong>し、攻撃不能・移動半減となる。ターン開始時に後方で回復する。</p>
+<h2>昼と夜</h2>
+<p>昼：射撃・砲撃・艦砲が有効（攻勢側有利）。夜：射程-1、砲撃精度-50%、代わりに<strong>夜襲ボーナス</strong>が発動し、白兵戦（×1.5／反撃×0.7）・近接射撃（距離1で×1.3／命中+10%）・肉薄攻撃（成功率68%／自軍損害軽減）が強化される。移動の隠蔽+、トンネル移動も有効で、守備側が陣地を取り返す時間であると同時に、攻勢側も夜襲で塹壕を抜く好機になる。</p>
+<h2>補給（1週間セット）</h2>
+<p>7日（14ターン）終了で補給フェイズ。ネスメルソンは兵力回復15%・弾薬全回復・戦車修理。ただし狙撃で失った下士官層は戻らず、士気上限が下がったままになる。守備側の回復は港との連絡が開いている度合い（最大8%）に依存し、連絡を断たれると回復ゼロ・弾薬も半分しか戻らない。そのまま第2週以降の長期戦へ継続できる。</p>
+<h2>勝敗</h2>
+<p>ネスメルソン勝利：山頂＋反斜面主陣地（全ヘクス）＋トンネル入口2か所以上を制圧。守備側勝利：13日終了時点で反斜面主陣地を1ヘクスでも保持。山頂のみ確保は史実通り「攻勢停止」となり、損害率でS～Dランク評価。艦が0隻になれば守備側は全滅エンド、攻勢側の損害を抑えた完全制圧は完全勝利エンドとなる。</p>
+<div class="btnrow"><button class="primary" id="btnCloseRules">閉じる</button></div>
+</div>
+</div>
+
+<!-- 結果 -->
+<div class="overlay hidden" id="endOverlay">
+<div class="sheet">
+<div class="mini" style="letter-spacing:.2em" id="endKicker">RESULT</div>
+<h1 id="endTitle"></h1>
+<div id="endBody"></div>
+<div class="btnrow">
+<button class="primary" id="btnEndContinue">長期戦を継続する（補給フェイズへ）</button>
+<button id="btnEndRestart">最初から遊ぶ</button>
+</div>
+</div>
+</div>
+
+<script>
+"use strict";
+/* ============ 基本定数 ============ */
+var COLS=18, ROWS=16, HEX=30;
+var SQ3=Math.sqrt(3);
+var TERRAIN={
+plain:{name:"平地",def:0,cost:1,color:"#a9a06b",dark:"#8f875c"},
+forest:{name:"森林",def:20,cost:2,color:"#5d7350",dark:"#4c6243"},
+rock:{name:"岩場",def:30,cost:2,color:"#8d8578",dark:"#797165"},
+summit:{name:"山頂（103高地）",def:10,cost:2,color:"#c2b280",dark:"#ab9c6e"},
+sslope:{name:"南斜面",def:-10,cost:2,color:"#b3a06f",dark:"#9c8a5f"},
+rslope:{name:"反斜面",def:40,cost:2,color:"#7d8464",dark:"#6a7156"},
+trench:{name:"塹壕・岩盤壕",def:50,cost:1,color:"#6e6a4e",dark:"#5d5942"},
+road:{name:"街道",def:-20,cost:0.5,color:"#cbbfa0",dark:"#b3a586"},
+city:{name:"市街",def:25,cost:1,color:"#9c8f7d",dark:"#857763"},
+port:{name:"港湾",def:20,cost:1,color:"#7d94a0",dark:"#68808d"},
+hill126:{name:"126高地",def:15,cost:2,color:"#bfae7e",dark:"#a89468"}
+};
+var DATES=["10月7日","10月8日","10月9日","10月10日","10月11日","10月12日","10月13日"];
+
+/* ============ マップ生成 ============ */
+function terrainAt(c,r){
+// 街道（西側）：列2を縦断、北端で列3へ
+if(c===2 && r>=4) return "road";
+if(c===3 && r>=11) return "road";
+if(r===0){ return (c>=13&&c<=16)?"port":"city";}
+if(r===1){ return (c>=14&&c<=16)?"port":"city";}
+if(r===2||r===3){
+if(c>=6&&c<=12) return (c%2===0)?"trench":"rslope";
+if(c>=4&&c<=13) return "rslope";
+return (c%3===0)?"forest":"plain";
+}
+if(r===4){
+if(c>=6&&c<=12) return (c%2===1)?"trench":"rslope";
+if(c>=4&&c<=13) return "rock";
+return (c%3===1)?"forest":"plain";
+}
+if(r===5){
+if(c>=7&&c<=11) return "summit";
+if(c>=5&&c<=13) return "rock";
+return (c%2===0)?"forest":"plain";
+}
+if(r===6||r===7){
+if(c>=5&&c<=13) return "sslope";
+return (c%3===0)?"forest":"plain";
+}
+if(r===8||r===9){
+if(c>=6&&c<=12 && r===8) return "sslope";
+var t8=["forest","plain","rock","plain","forest","rock"][(c+r)%6];
+return t8;
+}
+if(r===10||r===11){
+var t10=["plain","forest","plain","rock","forest","plain"][(c*2+r)%6];
+return t10;
+}
+if(r===12||r===13){
+var t12=["forest","plain","plain","forest","rock","plain"][(c+r*3)%6];
+return t12;
+}
+if(r===14){ return (c>=4&&c<=13)?"plain":((c%2)?"forest":"plain");}
+// r===15 126高地
+return (c>=5&&c<=12)?"hill126":"plain";
+}
+var TUNNELS=[{c:7,r:3,id:"北坑口"},{c:11,r:3,id:"東坑口"},{c:9,r:6,id:"南坑口"},{c:13,r:1,id:"市街坑口"}];
+function isTunnel(c,r){ for(var i=0;i<TUNNELS.length;i++) if(TUNNELS[i].c===c&&TUNNELS[i].r===r) return TUNNELS[i]; return null;}
+var SUMMIT_HEXES=[], REVERSE_HEXES=[], PORT_HEXES=[];
+for(var _c=0;_c<COLS;_c++)for(var _r=0;_r<ROWS;_r++){
+var _t=terrainAt(_c,_r);
+if(_t==="summit")SUMMIT_HEXES.push({c:_c,r:_r});
+if((_t==="rslope"||_t==="trench")&&_r>=2&&_r<=4&&_c>=6&&_c<=12)REVERSE_HEXES.push({c:_c,r:_r});
+if(_t==="port")PORT_HEXES.push({c:_c,r:_r});
+}
+
+/* ============ ヘクス計算 ============ */
+function key(c,r){return c+","+r;}
+function hexXY(c,r){ return {x:HEX*SQ3*(c+0.5*(r&1))+HEX, y:HEX*1.5*r+HEX};}
+function hexPoints(c,r){ var p=hexXY(c,r),s=""; for(var i=0;i<6;i++){ var a=Math.PI/180*(60*i-30); s+=(p.x+HEX*Math.cos(a)).toFixed(1)+","+(p.y+HEX*Math.sin(a)).toFixed(1)+" ";} return s.trim();}
+function offsetToCube(c,r){ var x=c-(r-(r&1))/2, z=r; return {x:x,z:z,y:-x-z};}
+function hexDist(a,b){ var A=offsetToCube(a.c,a.r),B=offsetToCube(b.c,b.r); return Math.max(Math.abs(A.x-B.x),Math.abs(A.y-B.y),Math.abs(A.z-B.z));}
+function neighbors(c,r){ var odd=(r&1)===1; var d=odd?[[1,0],[1,-1],[0,-1],[-1,-1],[-1,0],[0,1]]:[[1,1],[1,0],[0,-1],[-1,0],[-1,1],[0,1]]; var out=[]; for(var i=0;i<6;i++){ var nc=c+d[i][0],nr=r+d[i][1]; if(nc>=0&&nc<COLS&&nr>=0&&nr<ROWS)out.push({c:nc,r:nr});} return out;}
+function rnd(a,b){return a+Math.random()*(b-a);}
+function ri(a,b){return Math.floor(rnd(a,b+1));}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+
+/* ============ ユニット定義 ============ */
+var uidSeq=0;
+function mkUnit(side,type,name,c,r,o){
+o=o||{};
+var base={
+inf:{hp:100,move:4,range:2,fire:22,melee:30,label:"歩",full:"歩兵大隊"},
+infD:{hp:100,move:4,range:2,fire:20,melee:17,label:"歩",full:"婦女子戦闘大隊"},
+arty:{hp:80,move:2,range:8,fire:27,melee:6,label:"砲",full:"砲兵連隊",indirect:true},
+tank:{hp:120,move:5,range:3,fire:31,melee:20,label:"戦",full:"戦車中隊",vehicles:18},
+eng:{hp:85,move:4,range:2,fire:16,melee:22,label:"工",full:"工兵大隊"},
+engD:{hp:85,move:4,range:2,fire:16,melee:20,label:"工",full:"海兵隊工兵"},
+sniper:{hp:60,move:4,range:3,fire:11,melee:10,label:"狙",full:"狙撃班",sniper:true},
+atgun:{hp:70,move:2,range:4,fire:12,atFire:38,melee:6,label:"対",full:"対戦車砲兵"},
+mg:{hp:80,move:3,range:3,fire:25,melee:12,label:"機",full:"機関銃部隊"},
+obs:{hp:50,move:4,range:2,fire:8,melee:8,label:"観",full:"前線観測班"}
+}[type];
+return {id:++uidSeq,side:side,type:type,name:name,c:c,r:r,
+hp:base.hp,maxHp:base.hp,movePts:base.move,baseMove:base.move,range:base.range,
+fire:base.fire,melee:base.melee,label:base.label,full:base.full,
+indirect:!!base.indirect,sniper:!!base.sniper,atFire:base.atFire||0,vehicles:base.vehicles||0,maxVehicles:base.vehicles||0,
+morale:o.morale||ri(82,98),maxMorale:100,ammo:100,fatigue:0,supp:0,
+moved:false,acted:false,exposed:false,blind:0,immob:0,routed:false,dead:false,inTunnel:false};
+}
+function initialUnits(){
+uidSeq=0; var U=[];
+// ネスメルソン（攻勢側・南）
+var atkInf=[["第4師団 第1大隊",6,13],["第4師団 第2大隊",8,13],["第4師団 第3大隊",10,13],["第4師団 予備大隊",7,14],
+["第6師団 第1大隊",11,13],["第6師団 第2大隊",13,13],["第6師団 第3大隊",12,14],["第6師団 予備大隊",9,14]];
+atkInf.forEach(function(a){U.push(mkUnit("atk","inf",a[0],a[1],a[2]));});
+U.push(mkUnit("atk","arty","第2軍団 砲兵連隊A",7,15));
+U.push(mkUnit("atk","arty","第2軍団 砲兵連隊B",10,15));
+U.push(mkUnit("atk","eng","軍団工兵 第1大隊",8,14));
+U.push(mkUnit("atk","eng","軍団工兵 第2大隊",11,14));
+var tanks=[["第2機甲師団 戦車中隊1",3,14],["第2機甲師団 戦車中隊2",3,13],["第2機甲師団 戦車中隊3",4,14],["第2機甲師団 戦車中隊4",2,12],["第2機甲師団 戦車中隊5",4,13]];
+tanks.forEach(function(a){ var u=mkUnit("atk","tank",a[0],a[1],a[2]); u.locked=true; U.push(u);});
+// リクショール（守備側・北）
+var defInf=[["第14師団 第1大隊",7,3],["第14師団 第2大隊",9,2],["第14師団 第3大隊",11,3],
+["第15師団 第1大隊",8,4],["第15師団 第2大隊",10,4],["第15師団 第3大隊",12,2]];
+defInf.forEach(function(a){U.push(mkUnit("def","infD",a[0],a[1],a[2],{morale:ri(92,100)}));});
+U.push(mkUnit("def","sniper","狙撃班 甲",8,3));
+U.push(mkUnit("def","sniper","狙撃班 乙",10,3));
+U.push(mkUnit("def","sniper","狙撃班 丙",9,5));
+U.push(mkUnit("def","atgun","対戦車砲 第1中隊",2,7));
+U.push(mkUnit("def","atgun","対戦車砲 第2中隊",2,8));
+U.push(mkUnit("def","atgun","対戦車砲 第3中隊",3,8));
+U.push(mkUnit("def","mg","機関銃部隊 甲",9,3));
+U.push(mkUnit("def","mg","機関銃部隊 乙",7,4));
+U.push(mkUnit("def","engD","海兵隊工兵",12,3));
+U.push(mkUnit("def","obs","前線観測班",13,1));
+return U;
+}
+
+/* ============ 音響（BGM／SE：Web Audio 合成） ============
+   外部音源は使わず、旋律と効果音をすべてシンセサイザーで生成する。
+   BGM：ネスメルソン＝抜刀隊／リクショール＝カチューシャ */
+function expandSteps(events){ var out=[]; events.forEach(function(e){ var n=Math.max(1,Math.round(e[1]*2)); for(var i=0;i<n;i++)out.push(i===0?e[0]:-e[0]); }); return out; }
+var SONGS={
+atk:{title:"抜刀隊",bpm:116,
+melody:expandSteps([[76,1],[79,1],[79,.5],[81,.5],[79,1],[76,1],[74,1],[72,1],[74,1],[76,1],[79,1],[76,1],[74,1.5],[0,.5],
+[76,1],[79,1],[79,.5],[81,.5],[79,1],[76,1],[77,1],[79,1],[81,1],[79,1],[76,1],[74,1],[72,1.5],[0,.5],
+[84,1],[81,1],[79,1],[76,1],[77,1],[79,1],[81,1],[79,1],[76,1],[74,1],[72,1],[74,1],[76,2],[0,1],
+[72,1],[76,1],[79,1],[81,1],[79,1],[76,1],[74,1],[72,1],[74,1],[71,1],[72,2],[0,1]]),
+bass:expandSteps([[48,1],[55,1],[50,1],[55,1],[53,1],[55,1],[50,1],[55,1],[48,1],[55,1],[50,1],[55,1],[48,1],[43,1],[48,1],[55,1],
+[48,1],[55,1],[50,1],[55,1],[53,1],[55,1],[55,1],[43,1],[48,1],[55,1],[43,1],[55,1],[48,2],[0,1]])},
+def:{title:"カチューシャ",bpm:102,
+melody:expandSteps([[69,1],[72,1],[71,.5],[69,.5],[68,1],[69,2],[0,.5],
+[71,1],[74,1],[72,.5],[71,.5],[69,1],[68,1],[69,2],[0,.5],
+[76,1],[76,.5],[77,.5],[76,1],[74,1],[72,1],[71,2],
+[72,1],[71,.5],[69,.5],[68,1],[69,2.5],[0,.5],
+[69,1],[72,1],[71,.5],[69,.5],[68,1],[69,2],[0,.5],
+[76,1],[79,1],[77,.5],[76,.5],[74,1],[72,1],[71,1],[68,1],[69,3],[0,1]]),
+bass:expandSteps([[45,1],[52,1],[45,1],[52,1],[40,1],[52,1],[40,1],[52,1],[45,1],[52,1],[50,1],[52,1],[40,1],[52,1],[45,2],[0,1],
+[45,1],[52,1],[45,1],[52,1],[40,1],[52,1],[40,1],[52,1],[45,1],[52,1],[40,1],[52,1],[45,2],[0,1]])}
+};
+var Snd={
+ctx:null,bgmGain:null,seGain:null,bgmOn:true,seOn:true,playing:false,song:null,
+step:0,nextTime:0,timer:null,lastSe:{},
+init:function(){
+if(this.ctx){ if(this.ctx.state==="suspended")this.ctx.resume(); return; }
+var AC=window.AudioContext||window.webkitAudioContext; if(!AC)return;
+this.ctx=new AC();
+this.bgmGain=this.ctx.createGain(); this.bgmGain.gain.value=0.9; this.bgmGain.connect(this.ctx.destination);
+this.seGain=this.ctx.createGain(); this.seGain.gain.value=0.9; this.seGain.connect(this.ctx.destination);
+},
+midi:function(m){ return 440*Math.pow(2,(m-69)/12); },
+tone:function(freq,t,dur,type,vol,dest,slideTo){
+var o=this.ctx.createOscillator(),g=this.ctx.createGain();
+o.type=type; o.frequency.setValueAtTime(freq,t);
+if(slideTo)o.frequency.exponentialRampToValueAtTime(Math.max(20,slideTo),t+dur);
+g.gain.setValueAtTime(0.0001,t);
+g.gain.exponentialRampToValueAtTime(vol,t+0.015);
+g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+o.connect(g); g.connect(dest||this.bgmGain); o.start(t); o.stop(t+dur+0.05);
+},
+noiseBuf:null,
+noise:function(t,dur,vol,fType,fFrom,fTo,dest){
+if(!this.noiseBuf){ var len=this.ctx.sampleRate*1; this.noiseBuf=this.ctx.createBuffer(1,len,this.ctx.sampleRate); var d=this.noiseBuf.getChannelData(0); for(var i=0;i<len;i++)d[i]=Math.random()*2-1; }
+var src=this.ctx.createBufferSource(); src.buffer=this.noiseBuf; src.loop=true;
+var f=this.ctx.createBiquadFilter(); f.type=fType; f.frequency.setValueAtTime(fFrom,t); f.frequency.exponentialRampToValueAtTime(Math.max(30,fTo),t+dur);
+var g=this.ctx.createGain(); g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+src.connect(f); f.connect(g); g.connect(dest||this.seGain); src.start(t); src.stop(t+dur+0.05);
+},
+startBgm:function(side){
+this.init(); if(!this.ctx)return;
+this.song=SONGS[side]; this.step=0; this.playing=true;
+var chip=document.getElementById("bgmChip"); if(chip)chip.textContent="♪ BGM：「"+this.song.title+"」"+(side==="atk"?"（ネスメルソン軍歌）":"（リクショール陣営）");
+if(this.timer)clearInterval(this.timer);
+var self=this; this.nextTime=this.ctx.currentTime+0.1;
+this.timer=setInterval(function(){ self.schedule(); },90);
+},
+schedule:function(){
+if(!this.playing||!this.bgmOn||!this.song)return;
+if(this.nextTime<this.ctx.currentTime-0.05)this.nextTime=this.ctx.currentTime+0.05; // 再開時に過去分を一斉再生しない
+var stepDur=60/this.song.bpm/2, mel=this.song.melody, bas=this.song.bass;
+while(this.nextTime<this.ctx.currentTime+0.28){
+var t=this.nextTime, s=this.step;
+var m=mel[s%mel.length];
+if(m>0)this.tone(this.midi(m),t,stepDur*0.92,"triangle",0.16);
+else if(m<0)this.tone(this.midi(-m),t,stepDur*0.92,"triangle",0.11);
+var b=bas[s%bas.length];
+if(b>0)this.tone(this.midi(b),t,stepDur*0.95,"sine",0.20);
+if(s%2===0)this.noise(t,0.05,s%4===0?0.05:0.028,"highpass",5000,6000,this.bgmGain); // 軍楽隊の小太鼓
+this.step++; this.nextTime+=stepDur;
+}
+},
+throttle:function(kind,ms){ var now=performance.now(); if(this.lastSe[kind]&&now-this.lastSe[kind]<ms)return false; this.lastSe[kind]=now; return true; },
+gunshot:function(big){
+if(!this.seOn||!this.ctx||!this.throttle("gun",90))return;
+var t=this.ctx.currentTime;
+this.noise(t,big?0.22:0.15,big?0.5:0.38,"lowpass",3800,300,this.seGain);
+this.tone(big?140:170,t,big?0.2:0.13,"sine",0.4,this.seGain,38);
+if(big){ this.noise(t+0.09,0.13,0.3,"lowpass",3000,300,this.seGain); this.noise(t+0.18,0.13,0.3,"lowpass",3000,300,this.seGain); }
+},
+sword:function(){
+if(!this.seOn||!this.ctx||!this.throttle("sword",120))return;
+var t=this.ctx.currentTime;
+this.noise(t,0.28,0.22,"bandpass",3400,600,this.seGain); // 斬撃の風切り
+var self=this; [2470,3310,4430,5290].forEach(function(f,i){ self.tone(f*(0.97+Math.random()*0.05),t+0.05+i*0.012,0.34,"square",0.055,self.seGain); });
+this.tone(1180,t+0.05,0.16,"triangle",0.12,this.seGain,700);
+},
+cannon:function(big){
+if(!this.seOn||!this.ctx||!this.throttle("cannon",140))return;
+var t=this.ctx.currentTime;
+this.tone(big?95:110,t,big?0.95:0.7,"sine",big?0.85:0.65,this.seGain,26);
+this.noise(t,big?0.9:0.6,big?0.55:0.42,"lowpass",900,90,this.seGain);
+this.noise(t+0.03,0.18,0.3,"lowpass",2600,400,this.seGain);
+},
+bugle:function(){
+if(!this.seOn||!this.ctx||!this.throttle("bugle",400))return;
+var t=this.ctx.currentTime, self=this, beat=60/132/2;
+var seq=[[67,1],[72,1],[76,1],[79,1],[79,.5],[79,.5],[79,1],[76,1],[79,2],[79,.5],[79,.5],[79,1],[84,1],[79,3]];
+var at=t+0.02;
+seq.forEach(function(n){ var d=n[1]*beat*2*0.5;
+for(var h=1;h<=3;h++){ /* 倍音でラッパらしい音色に */ }
+self.tone(self.midi(n[0]),at,d*0.94,"sawtooth",0.11,self.seGain);
+self.tone(self.midi(n[0])*2,at,d*0.94,"square",0.028,self.seGain);
+at+=d; });
+}
+};
+document.addEventListener("pointerdown",function(){ Snd.init(); },true);
+
+/* ============ ゲーム状態 ============ */
+var G=null;
+function newGame(playerSide){
+var units=initialUnits();
+var control={};
+for(var c=0;c<COLS;c++)for(var r=0;r<ROWS;r++) control[key(c,r)] = r<=7? "def":"atk";
+SUMMIT_HEXES.forEach(function(h){control[key(h.c,h.r)]="def";});
+G={player:playerSide,turn:1,week:1,units:units,control:control,
+selected:null,actionMode:"shoot",navalMode:false,navalUsed:0,ships:2,showTunnel:true,
+hpLost:{atk:0,def:0},tankLost:0,over:false,prepDone:false,aiBusy:false,
+totalHp:{atk:0,def:0},judged:false};
+units.forEach(function(u){G.totalHp[u.side]+=u.maxHp;});
+logClear();
+addLog("第五次ノルドヴィーク攻勢、開始。1945年10月7日 朝――","hd");
+addLog(playerSide==="atk"?"あなたはネスメルソン北部軍集団を指揮する。103高地を7日で制圧せよ。":"あなたはノルドヴィーク海軍政府軍を指揮する。103高地を7日間守り切れ。","");
+startTurnEffects(true);
+}
+function turnDate(){ var idx=Math.min(6,Math.floor((G.turn-1)/2)); return DATES[idx];}
+function isNight(){ return G.turn%2===0;}
+/* 夜襲ボーナス定数（夜ターンのみ発動） */
+var NIGHT_MELEE_MULT=1.5;      /* 白兵ダメージ倍率 */
+var NIGHT_MELEE_BACK_MULT=0.7; /* 白兵で受ける反撃の倍率 */
+var NIGHT_CLOSE_MULT=1.3;      /* 距離1の近接射撃ダメージ倍率 */
+var NIGHT_CLOSE_HIT=0.10;      /* 距離1の近接射撃の命中補正 */
+var NIGHT_AT_SUCCESS=0.68;     /* 肉薄攻撃の成功率（昼0.48） */
+var NIGHT_AT_DMG=0.26;         /* 肉薄成功時の戦車損害率（昼0.18） */
+function dayIndex(){ return Math.floor((G.turn-1)/2);}
+function unitAt(c,r){ for(var i=0;i<G.units.length;i++){var u=G.units[i]; if(!u.dead&&u.c===c&&u.r===r)return u;} return null;}
+function aliveUnits(side){ return G.units.filter(function(u){return!u.dead&&(!side||u.side===side);});}
+
+/* ============ ログ ============ */
+var logScrollPending=false;
+function addLog(msg,cls){ var el=document.getElementById("log"); var d=document.createElement("div"); if(cls)d.className=cls; d.textContent=msg; el.appendChild(d); if(!logScrollPending){ logScrollPending=true; setTimeout(function(){ logScrollPending=false; var e2=document.getElementById("log"); if(e2)e2.scrollTop=e2.scrollHeight; },80); } }
+function logClear(){ document.getElementById("log").innerHTML="";}
+
+/* ============ 移動 ============ */
+function reachable(u){
+var res={},cost={}; cost[key(u.c,u.r)]=0; res[key(u.c,u.r)]={c:u.c,r:u.r,cost:0};
+var pq=[{c:u.c,r:u.r,cost:0}];
+var maxMove=u.routed?Math.ceil(u.baseMove/2):u.baseMove;
+if(u.immob>0) maxMove=0;
+while(pq.length){
+pq.sort(function(a,b){return a.cost-b.cost;});
+var cur=pq.shift();
+var ns=neighbors(cur.c,cur.r);
+for(var i=0;i<ns.length;i++){
+var n=ns[i], occ=unitAt(n.c,n.r);
+if(occ) continue;
+var step=TERRAIN[terrainAt(n.c,n.r)].cost;
+if(u.type==="tank"&&terrainAt(n.c,n.r)==="forest") step=3;
+var nc=cur.cost+step;
+if(nc<=maxMove+0.001 && (cost[key(n.c,n.r)]===undefined||nc<cost[key(n.c,n.r)])){
+cost[key(n.c,n.r)]=nc; res[key(n.c,n.r)]={c:n.c,r:n.r,cost:nc};
+pq.push({c:n.c,r:n.r,cost:nc});
+}
+}
+}
+// トンネル：守備側が入口にいれば他入口へ（封鎖チェック）
+if(u.side==="def"&&isTunnel(u.c,u.r)){
+TUNNELS.forEach(function(t){
+if(t.c===u.c&&t.r===u.r)return;
+var occ=unitAt(t.c,t.r); if(occ)return;
+if(G.control[key(t.c,t.r)]==="atk")return; // 入口制圧で封鎖
+res[key(t.c,t.r)]={c:t.c,r:t.r,cost:1,tunnel:true};
+});
+}
+delete res[key(u.c,u.r)];
+return res;
+}
+function moveUnit(u,c,r,viaTunnel){
+var from={c:u.c,r:u.r};
+u.c=c;u.r=r;u.moved=true;u.inTunnel=!!viaTunnel;
+G.control[key(c,r)]=u.side;
+u.fatigue=clamp(u.fatigue+ (viaTunnel?4:8),0,100);
+if(viaTunnel) addLog(u.name+" はトンネル網を移動し "+TERRAIN[terrainAt(c,r)].name+"（"+(c+1)+","+(r+1)+"）へ展開。砲撃を受けることなく陣地間を移った。","");
+// 地雷：街道・南斜面の守備側地雷（攻勢側のみ、工兵は回避）
+if(u.side==="atk"&&u.type!=="eng"&&Math.random()<0.10&&(terrainAt(c,r)==="road"||terrainAt(c,r)==="sslope")){
+var md=Math.round(u.maxHp*rnd(0.06,0.13));
+applyDamage(u,md,"地雷");
+addLog("⚠ "+u.name+" が地雷原に触雷。損害 "+md+"。","bad");
+}
+return from;
+}
+
+/* ============ 戦闘 ============ */
+function effRange(u){ var r=u.range; if(isNight())r-=1; if(u.blind>0)r=Math.min(r,1); return Math.max(1,r);}
+function applyDamage(u,dmg,cause){
+if(u.dead)return 0;
+dmg=Math.max(0,Math.round(dmg));
+u.hp-=dmg; G.hpLost[u.side]+=dmg;
+if(u.type==="tank"){ var lost=Math.round((1-Math.max(0,u.hp)/u.maxHp)*0);}
+u.morale=clamp(u.morale-dmg*0.55-(cause==="snipe"?16:0),0,100);
+u.supp=clamp(u.supp+dmg*0.7,0,100);
+if(u.hp<=0){ u.hp=0;u.dead=true;
+if(u.type==="tank"){ G.tankLost+=u.maxVehicles; addLog("💥 "+u.name+" は撃破・炎上。全車両を喪失した。","bad");}
+else addLog("✝ "+u.name+" は戦闘力を喪失し壊滅した。","bad");
+if(G.selected===u)G.selected=null;
+} else if(u.morale<=18&&!u.routed){ u.routed=true; addLog("🏳 "+u.name+" は士気が崩壊し潰走状態となった（HP残存でも戦えない）。","bad");}
+return dmg;
+}
+function tankVehiclesLostTotal(){
+var lost=0; G.units.forEach(function(u){ if(u.type==="tank") lost+=Math.round(u.maxVehicles*(1-Math.max(0,u.hp)/u.maxHp));}); return lost;
+}
+function doShoot(att,def,opts){
+opts=opts||{};
+if(att.indirect)Snd.cannon(false); else Snd.gunshot(att.type==="mg"); // SE：砲兵＝砲撃音、その他＝銃声（機関銃は連射音）
+var t=TERRAIN[terrainAt(def.c,def.r)];
+var dist=hexDist(att,def);
+var fire=att.fire;
+if(att.type==="atgun"&&def.type==="tank")fire=att.atFire;
+if(att.sniper&&def.type==="tank"){
+// 戦車長・観測装置狙撃 → 盲目
+att.acted=true; att.ammo=Math.max(0,att.ammo-6); att.fatigue=clamp(att.fatigue+6,0,100);
+if(Math.random()<0.62){ def.blind=2; def.morale=clamp(def.morale-8,0,100);
+addLog("🎯 "+att.name+" の狙撃が "+def.name+" の戦車長／観測装置を捉えた――戦車は「盲目」となった。","good");
+} else addLog(att.name+" の対戦車狙撃は外れた。","");
+afterAction(att); return;
+}
+var hitBase=0.78 - dist*0.05 - att.supp*0.002 - att.fatigue*0.0015;
+if(att.blind>0)hitBase-=0.35;
+if(isNight())hitBase-=0.08;
+if(isNight()&&dist===1&&!att.indirect)hitBase+=NIGHT_CLOSE_HIT; // 夜襲ボーナス：近接射撃の命中+
+if(att.indirect){ hitBase-=0.12; if(isNight())hitBase-=0.25;}
+var dmg=fire*rnd(0.75,1.25);
+if(isNight()&&dist===1&&!att.indirect)dmg*=NIGHT_CLOSE_MULT; // 夜襲ボーナス：近接射撃ダメージ+
+dmg*= (1 - t.def/100);
+if(def.exposed)dmg*=1.5;
+if(att.indirect&&terrainAt(def.c,def.r)==="rslope")dmg*=0.3; // 反斜面は間接砲撃-70%
+if(att.indirect&&terrainAt(def.c,def.r)==="trench")dmg*=0.55;
+if(isTunnel(def.c,def.r)&&def.side==="def"&&def.inTunnel)dmg*=0.2;
+// パックフロント：隣接する味方対戦車砲
+if(att.type==="atgun"){ var adj=neighbors(att.c,att.r).some(function(n){var o=unitAt(n.c,n.r);return o&&o.side===att.side&&o.type==="atgun";}); if(adj){dmg*=1.35; addLog("（パックフロント集中射撃ボーナス）","");}}
+if(def.type==="tank"&&att.type!=="atgun"&&!att.indirect&&!att.sniper)dmg*=0.45; // 小火器は戦車に効きにくい
+if(Math.random()>clamp(hitBase,0.15,0.95)){ addLog(att.name+" → "+def.name+" への射撃は命中しなかった。",""); att.acted=true; att.ammo=Math.max(0,att.ammo-8); afterAction(att); return;}
+att.acted=true; att.ammo=Math.max(0,att.ammo-8); att.fatigue=clamp(att.fatigue+7,0,100);
+var cause=att.sniper?"snipe":"shoot";
+var real=applyDamage(def,Math.round(dmg),cause);
+addLog(att.name+" の射撃 → "+def.name+" に損害 "+real+"（残HP "+Math.max(0,def.hp)+"／士気 "+Math.round(def.morale)+"）"+((isNight()&&dist===1&&!att.indirect)?"［🌙夜襲：近接射撃ボーナス］":"")+"。", att.side===G.player?"good":"bad");
+if(att.sniper)addLog("狙撃班は指揮官・通信兵を優先――"+def.name+" の士気と連携が削られた。","");
+afterAction(att);
+}
+function doMelee(att,def){
+Snd.sword(); // SE：白兵戦＝剣戟音
+var t=TERRAIN[terrainAt(def.c,def.r)];
+var base=att.melee*rnd(0.9,1.35);
+var defBonus=t.def/100*0.5; // 地形ボーナス半減
+// 守備側の地形適性反転：塹壕・岩場・トンネル入口では婦女子戦闘隊が強い
+var defTerrain=terrainAt(def.c,def.r);
+if(def.side==="def"&&(defTerrain==="trench"||defTerrain==="rock"||isTunnel(def.c,def.r))) defBonus+=0.18;
+if(att.side==="def"&&(defTerrain==="trench"||defTerrain==="rock")) base*=1.25;
+var nightRaid=isNight();
+if(nightRaid)base*=NIGHT_MELEE_MULT; // 夜襲ボーナス：白兵ダメージ×1.5
+var dmg=Math.round(base*(1-defBonus));
+att.acted=true; att.exposed=true; att.fatigue=clamp(att.fatigue+16,0,100); att.ammo=Math.max(0,att.ammo-5);
+var real=applyDamage(def,dmg,"melee");
+var back=Math.round(def.melee*rnd(0.3,0.6)*(att.side==="def"?0.8:1)*(nightRaid?NIGHT_MELEE_BACK_MULT:1)); // 夜襲ボーナス：闇で反撃を受けにくい
+var backReal=applyDamage(att,back,"meleeBack");
+addLog("⚔ "+(nightRaid?"🌙夜襲！ 白兵戦":"白兵戦")+"！ "+att.name+" が "+def.name+" の陣地へ突入。敵損害 "+real+"、自軍も反撃で "+backReal+" の損害"+(nightRaid?"（夜襲ボーナス：ダメージ×1.5／反撃×0.7）":"")+"。仕掛けた部隊は無防備になった。", att.side===G.player?"good":"bad");
+afterAction(att);
+}
+function doAntiTank(att,def){
+// 肉薄攻撃：歩兵 40-60%損害、成功で足止め+盲目
+Snd.bugle(); // SE：肉薄攻撃＝突撃ラッパ
+att.acted=true; att.exposed=true; att.fatigue=clamp(att.fatigue+20,0,100);
+var nightAT=isNight();
+var self=Math.round(att.hp*(nightAT?rnd(0.25,0.4):rnd(0.4,0.6))); // 夜襲ボーナス：闇に紛れて接近しやすく損害軽減
+var success=Math.random()<(nightAT?NIGHT_AT_SUCCESS:0.48); // 夜襲ボーナス：成功率アップ
+addLog("💣 "+(nightAT?"🌙夜襲・肉薄攻撃":"肉薄攻撃")+"！ "+att.name+" の対戦車班が成形炸薬爆雷を抱えて "+def.name+" へ接近――"+(nightAT?"（夜襲ボーナス：成功率68%／自軍損害軽減）":""),"hd");
+var selfReal=applyDamage(att,self,"antitank");
+addLog("接近班は "+selfReal+" の損害を受けた（犠牲は大きい）。","bad");
+if(success){ def.immob=ri(1,2); def.blind=2; def.morale=clamp(def.morale-15,0,100); def.supp=clamp(def.supp+40,0,100);
+var d=applyDamage(def,Math.round(def.maxHp*(nightAT?NIGHT_AT_DMG:0.18)),"antitank");
+addLog("爆雷が炸裂！ "+def.name+" は損害 "+d+" を受け、足止め（"+def.immob+"ターン移動不可）＋盲目となった。","good");
+} else addLog("肉薄攻撃は失敗。戦車はなお健在である。","bad");
+afterAction(att);
+}
+function afterAction(u){ /* 行動済み処理のみ */}
+function canAct(u){ return!u.dead&&!u.acted&&!u.routed&&!u.locked;}
+function canMove(u){ return!u.dead&&!u.moved&&!u.routed&&!u.locked&&u.immob===0;}
+
+/* ============ 艦砲支援 ============ */
+function navalFireAt(c,r){
+var usesLeft=2-G.navalUsed;
+if(usesLeft<=0)return;
+G.navalUsed++;
+Snd.cannon(true); // SE：艦砲＝重砲撃音
+addLog("🚢 艦砲支援――軽巡《スヴァルテルヴァ》《イェルンエルヴァ》が ("+(c+1)+","+(r+1)+") へ集中射撃！","hd");
+var targets=[];
+[{c:c,r:r}].concat(neighbors(c,r)).forEach(function(h,idx){
+var u=unitAt(h.c,h.r); if(u&&u.side==="atk")targets.push({u:u,main:idx===0});
+});
+if(!targets.length)addLog("艦砲弾は着弾したが、その区域に敵はいなかった。","");
+targets.forEach(function(t){
+var crossed = t.u.r<=5; // 山頂稜線を越えた敵には高精度
+var dmg=t.u.maxHp*rnd(0.22,0.38)*(t.main?1:0.5)*(crossed?1.25:0.55);
+if(t.u.type==="tank")dmg*=0.7;
+var real=applyDamage(t.u,Math.round(dmg),"naval");
+addLog("艦砲 → "+t.u.name+" に損害 "+real+(crossed?"（稜線を越えた敵への高精度射撃）":"（稜線手前：精度低下）")+"。", G.player==="def"?"good":"bad");
+});
+G.navalMode=false;
+render();
+}
+
+/* ============ ターン処理 ============ */
+function startTurnEffects(first){
+// 日替わりで艦砲リセット
+if(G.turn%2===1)G.navalUsed=0;
+aliveUnits().forEach(function(u){
+u.moved=false;u.acted=false;u.exposed=false;
+u.supp=Math.max(0,u.supp-35);
+u.fatigue=Math.max(0,u.fatigue-12);
+if(u.routed&&Math.random()<0.6){ u.morale=clamp(u.morale+22,0,u.maxMorale); if(u.morale>30){u.routed=false; addLog(u.name+" は隊列を立て直し、戦線へ復帰した。","");}}
+else if(!u.routed) u.morale=clamp(u.morale+4,0,u.maxMorale);
+if(u.immob>0)u.immob--;
+if(u.blind>0){
+var adjInf=neighbors(u.c,u.r).some(function(n){var o=unitAt(n.c,n.r);return o&&o.side===u.side&&(o.type==="inf"||o.type==="infD");});
+if(adjInf){u.blind=0; addLog(u.name+" は随伴歩兵の誘導で視界を回復した。","");}
+// 随伴なしでは盲目は続く（blindはカウンタでなく状態として保持：2→1で自動回復させない）
+if(u.blind===1&&!adjInf)u.blind=2;
+}
+if(u.type==="tank"&&u.locked&&G.turn>=7)u.locked=false;
+});
+// 歴史イベント
+if(G.turn===1&&!G.prepDone){
+G.prepDone=true;
+Snd.cannon(true); setTimeout(function(){Snd.lastSe.cannon=0;Snd.cannon(true);},450); setTimeout(function(){Snd.lastSe.cannon=0;Snd.cannon(false);},900); // SE：大準備砲撃の斉射
+addLog("10月7日早朝――126高地の砲兵が一斉射撃。大準備砲撃が103高地を包んだ。","hd");
+aliveUnits("def").forEach(function(u){
+var t=terrainAt(u.c,u.r);
+if(t==="sslope"||t==="summit"){ var d=applyDamage(u,Math.round(u.maxHp*rnd(0.25,0.4)),"prep"); addLog("準備砲撃："+u.name+"（"+TERRAIN[t].name+"）損害 "+d+"。","bad");}
+else if(t==="rslope"||t==="trench"){ addLog("準備砲撃："+u.name+" は反斜面の陣地に退避し、ほぼ無傷だった。","good");}
+});
+}
+if(G.turn===3)addLog("10月8日――塹壕・岩場・トンネル入口を巡る白兵戦が激化する。婦女子戦闘隊は地形と退避路で崩れない。","hd");
+if(G.turn===5)addLog("10月9日――白兵戦は続く。狙撃は指揮官・通信兵を優先し、攻勢側の下士官層が静かに削られていく。","hd");
+if(G.turn===7)addLog("10月10日――ネスメルソン軍、第2機甲師団などから戦車70～100両を投入。戦車中隊が街道と南斜面に展開可能となった。","hd");
+if(G.turn===11)addLog("10月12日――第4・第6師団の消耗は深刻化。陣地を取っても夜に取り返される消耗戦が続く。","hd");
+render();
+}
+function endPlayerTurn(){
+if(G.aiBusy||G.over)return;
+G.aiBusy=true; G.selected=null;
+addLog("―― "+turnDate()+" "+(isNight()?"夜":"昼")+"："+(G.player==="atk"?"ネスメルソン軍":"海軍政府軍")+"の行動終了。敵軍が行動する――","");
+runAI(G.player==="atk"?"def":"atk");
+G.aiBusy=false;
+advanceTurn();
+}
+function advanceTurn(){
+G.turn++;
+if(G.turn>14*G.week){ supplyPhase(); return;}
+addLog("＝＝ "+turnDate()+" "+(isNight()?"":"")+" ターン"+G.turn+" ＝＝","hd");
+if(isNight())addLog("🌙 夜が来た――夜襲ボーナス発動。白兵ダメージ×1.5／反撃×0.7、距離1の近接射撃×1.3／命中+10%、肉薄攻撃は成功率68%・自軍損害軽減。射程は短く砲撃は不正確になるが、白兵・夜襲・トンネル移動が冴える時間だ。","hd");
+startTurnEffects(false);
+render();
+}
+function supplyPhase(){
+// 補給フェイズ＋週間判定
+var atkHeal=0,defHeal=0;
+aliveUnits("atk").forEach(function(u){ var h=Math.round((u.maxHp-u.hp)*0.15)+Math.round(u.maxHp*0.05); if(u.type==="tank")h=Math.round(u.maxHp*0.12); u.hp=Math.min(u.maxHp,u.hp+h); u.ammo=100; u.routed=false; u.morale=clamp(u.morale+15,0,u.maxMorale); atkHeal+=h;});
+// 守備側：港連絡＝港ヘクスを守備側が保持している割合
+var portHeld=PORT_HEXES.filter(function(h){return G.control[key(h.c,h.r)]==="def";}).length;
+var ratio=PORT_HEXES.length?portHeld/PORT_HEXES.length:0;
+var defRate=0.08*ratio;
+aliveUnits("def").forEach(function(u){ var h=Math.round(u.maxHp*defRate); u.hp=Math.min(u.maxHp,u.hp+h); u.ammo=ratio>0?100:50; u.morale=clamp(u.morale+12,0,100); defHeal+=h;});
+addLog("第"+G.week+"週終了。ネスメルソン：兵力回復・弾薬全回復・戦車修理を実施（ただし狙撃で失った下士官層は戻らない）。守備側：港連絡率 "+Math.round(ratio*100)+"% に応じ兵力 "+Math.round(defRate*100)+"% 回復"+(ratio===0?"、連絡断絶のため弾薬は半分しか戻らない":"")+"。","hd");
+judgeWeek(true);
+}
+function controlCount(list,side){ return list.filter(function(h){return G.control[key(h.c,h.r)]===side;}).length;}
+function judgeWeek(fromSupply){
+var summitHeld=controlCount(SUMMIT_HEXES,"atk");
+var reverseHeldByDef=controlCount(REVERSE_HEXES,"def");
+var reverseAllAtk=reverseHeldByDef===0;
+var tunnelsAtk=TUNNELS.filter(function(t){return G.control[key(t.c,t.r)]==="atk";}).length;
+var atkWin=summitHeld===SUMMIT_HEXES.length&&reverseAllAtk&&tunnelsAtk>=2;
+var defWin=reverseHeldByDef>=1;
+var atkLossRate=G.hpLost.atk/Math.max(1,G.totalHp.atk);
+var defRemain=aliveUnits("def").reduce(function(s,u){return s+u.hp;},0)/Math.max(1,G.totalHp.def);
+var title,body,rank="";
+var lossTxt="ネスメルソン損害：兵力 "+Math.round(atkLossRate*100)+"%（戦車 "+tankVehiclesLostTotal()+" 両戦列離脱）／守備側残存兵力 "+Math.round(defRemain*100)+"%／艦 "+G.ships+" 隻健在。";
+if(G.ships<=0){
+title="全滅エンド ― 港湾陥落"; body="<p>軽巡《スヴァルテルヴァ》《イェルンエルヴァ》は失われ、港湾防衛地区は制圧された。艦砲を失った103高地守備隊の退路も断たれ、海軍政府のノルドヴィーク防衛はここに崩壊した。</p>";
+} else if(atkWin&&atkLossRate<0.35){
+title="完全勝利 ― 103高地制圧（ネスメルソン）"; rank="S";
+body="<p>山頂・反斜面主陣地・トンネル入口を制圧し、損害も抑えた。史実では到達できなかった完全制圧である。103高地を抜けた先、ノルドヴィーク市街と港湾は無防備に晒された。</p>";
+} else if(atkWin){
+title="ネスメルソン軍の勝利 ― 高地制圧"; rank=atkLossRate<0.5?"A":"B";
+body="<p>多大な損害と引き換えに103高地は落ちた。婦女子戦闘隊の防御体系はついに崩れたが、その代償は北部軍集団のその後の攻勢能力を大きく奪った。</p>";
+} else if(summitHeld>0&&reverseHeldByDef>=1){
+title="攻勢停止 ― 史実通りの結末"; rank=atkLossRate>0.45?"B":(atkLossRate>0.3?"C":"D");
+if(G.player==="def")rank=defRemain>0.55?"S":(defRemain>0.4?"A":"B");
+body="<p>ネスメルソン軍は山頂の一部を確保したものの、反斜面陣地を崩すことはできなかった。山頂に出れば港から艦砲が降り注ぐ。10月13日、ペチェク大将は第五次攻勢の中止を決断し、軍は126高地線へ撤収した。</p><p>後世の戦史はこう記す――「103高地では、婦女子戦闘隊は戦車より強かったのではない。戦車が本来必要とする目と歩兵を奪うことで、戦車を弱くした。」</p>";
+} else if(defWin){
+title="守備側の勝利 ― 103高地保持"; rank=defRemain>0.55?"S":(defRemain>0.4?"A":"B");
+body="<p>反斜面主陣地は最後まで落ちなかった。ただし守備側の兵力そのものも着実に減っている。これは勝利ではあるが、何度でも再現できる勝利ではない。</p>";
+} else {
+title="判定不能の消耗戦"; rank="C";
+body="<p>両軍ともに決定的な成果を得られないまま1週間が過ぎた。</p>";
+}
+document.getElementById("endKicker").textContent="第"+G.week+"週 最終判定 ― 1945年"+turnDate()+" 終了時点";
+document.getElementById("endTitle").textContent=title+(rank?"　［ランク "+rank+"］":"");
+document.getElementById("endBody").innerHTML=body+"<p class='mini'>"+lossTxt+"</p><p class='mini'>山頂制圧 "+summitHeld+"/"+SUMMIT_HEXES.length+" ／ 反斜面を守備側が保持 "+reverseHeldByDef+"/"+REVERSE_HEXES.length+" ／ トンネル入口を攻勢側が制圧 "+tunnelsAtk+"/4</p>";
+document.getElementById("endOverlay").classList.remove("hidden");
+document.getElementById("btnContinue").classList.remove("hidden");
+G.judged=true;
+}
+
+/* ============ AI ============ */
+function sleep(ms){return new Promise(function(res){setTimeout(res,ms);});}
+function runAI(side){
+var units=aliveUnits(side).filter(function(u){return!u.locked;});
+// 艦砲（守備側AI）
+if(side==="def"){
+var crossed=aliveUnits("atk").filter(function(u){return u.r<=5;});
+if(crossed.length&&G.navalUsed<2){ var t=crossed[0]; G.navalUsed++; navalFireAI(t.c,t.r); if(crossed.length>2&&G.navalUsed<2){ var t2=crossed[1]; G.navalUsed++; navalFireAI(t2.c,t2.r); }}
+}
+for(var i=0;i<units.length;i++){
+var u=units[i]; if(u.dead||u.routed)continue;
+aiUnit(u);
+}
+}
+function navalFireAI(c,r){
+Snd.cannon(true); // SE：艦砲＝重砲撃音
+addLog("🚢 敵艦砲支援――軽巡が ("+(c+1)+","+(r+1)+") へ集中射撃！","hd");
+[{c:c,r:r}].concat(neighbors(c,r)).forEach(function(h,idx){
+var u=unitAt(h.c,h.r); if(u&&u.side==="atk"){ var crossed=u.r<=5; var dmg=u.maxHp*rnd(0.22,0.38)*(idx===0?1:0.5)*(crossed?1.25:0.55); if(u.type==="tank")dmg*=0.7; var real=applyDamage(u,Math.round(dmg),"naval"); addLog("艦砲 → "+u.name+" に損害 "+real+"。","bad");}
+});
+}
+function nearestEnemy(u){
+var best=null,bd=1e9;
+aliveUnits(u.side==="atk"?"def":"atk").forEach(function(e){ if(e.locked)return; var d=hexDist(u,e); if(d<bd){bd=d;best=e;}});
+return {u:best,d:bd};
+}
+function aiUnit(u){
+var goal = u.side==="atk"? {c:9,r:3}: null;
+// 攻撃可能なら攻撃
+var ne=nearestEnemy(u); if(!ne.u)return;
+var rng=effRange(u);
+// 対戦車砲は戦車優先
+if(u.type==="atgun"){ var tanks=aliveUnits("atk").filter(function(e){return e.type==="tank"&&hexDist(u,e)<=rng;}); if(tanks.length){ doShoot(u,tanks[0]); return;}}
+if(u.sniper){ var tt=aliveUnits(u.side==="atk"?"def":"atk").filter(function(e){return hexDist(u,e)<=rng;}); if(tt.length){ tt.sort(function(a,b){return (b.type==="tank")-(a.type==="tank")||a.hp-b.hp;}); doShoot(u,tt[0]); return;}}
+if(ne.d===1){
+if(u.side==="def"&&ne.u.type==="tank"&&(u.type==="infD"||u.type==="engD")&&Math.random()<(isNight()?0.80:0.55)){ doAntiTank(u,ne.u); return;}
+if(!u.indirect&&Math.random()<(isNight()?0.85:0.6)){ doMelee(u,ne.u); return;}
+doShoot(u,ne.u); return;
+}
+if(ne.d<=rng){ doShoot(u,ne.u); return;}
+// 移動
+if(u.indirect) return; // 砲兵は動かない
+if(u.side==="def"&&u.type==="atgun") return; // 対戦車砲は陣地死守
+if(u.side==="def"&&(u.type==="mg")&&Math.random()<0.7) return;
+if(u.side==="def"&&!isNight()&&ne.d>5) return; // 昼は陣地死守。夜に反撃・奪回へ出る
+var reach=reachable(u); var bestKey=null,bestScore=1e9;
+Object.keys(reach).forEach(function(k){
+var cell=reach[k]; var score;
+if(u.side==="atk"){ score=hexDist(cell,goal)*10+hexDist(cell,ne.u); if(terrainAt(cell.c,cell.r)==="road"&&u.type==="tank")score-=8;}
+else {
+// 守備側：夜は前進して陣地奪回、昼は陣地保持寄り
+var target = isNight()? ne.u: {c:u.c,r:Math.max(1,u.r-1)};
+score=hexDist(cell,target)*10 + (terrainAt(cell.c,cell.r)==="trench"||terrainAt(cell.c,cell.r)==="rslope"?-6:0);
+if(u.type==="infD"&&hexDist(cell,ne.u)>3)score+=4;
+}
+if(score<bestScore){bestScore=score;bestKey=k;}
+});
+if(bestKey){ var cell2=reach[bestKey]; moveUnit(u,cell2.c,cell2.r,cell2.tunnel);}
+// 移動後攻撃
+var ne2=nearestEnemy(u);
+if(ne2.u&&!u.acted){
+if(ne2.d===1&&u.side==="def"&&ne2.u.type==="tank"&&(u.type==="infD"||u.type==="engD")&&Math.random()<(isNight()?0.75:0.5)){ doAntiTank(u,ne2.u); return;}
+if(ne2.d===1&&!u.indirect&&Math.random()<(isNight()?0.80:0.5)){ doMelee(u,ne2.u); return;}
+if(ne2.d<=effRange(u)) doShoot(u,ne2.u);
+}
+}
+
+/* ============ 描画 ============ */
+var NS="http://www.w3.org/2000/svg";
+function el(tag,attrs){ var e=document.createElementNS(NS,tag); for(var k in attrs)e.setAttribute(k,attrs[k]); return e;}
+var mapBase=null;
+function buildMapBase(){
+var box=document.getElementById("mapBox"); box.innerHTML="";
+var W=HEX*SQ3*(COLS+0.5)+HEX, H=HEX*1.5*(ROWS-1)+HEX*2;
+var svg=el("svg",{width:W,height:H,viewBox:"0 0 "+W+" "+H,role:"img","aria-label":"103\u9ad8\u5730\u30d8\u30af\u30b9\u30de\u30c3\u30d7"});
+var polys={},dots={},tuns={};
+for(var r=0;r<ROWS;r++)for(var c=0;c<COLS;c++){
+var t=terrainAt(c,r);
+var poly=el("polygon",{points:hexPoints(c,r),fill:TERRAIN[t].color,stroke:"rgba(30,30,20,.45)","stroke-width":1,"data-c":c,"data-r":r,style:"cursor:pointer"});
+svg.appendChild(poly); polys[key(c,r)]=poly;
+var p=hexXY(c,r);
+var mark = t==="forest"?"\u{1F332}":t==="trench"?"\u25BD":t==="summit"?"\u25B2103":t==="hill126"?"\u25B2126":t==="port"?"\u2693":t==="rock"?"\u25C6":t==="city"?"\u{1F3E0}":"";
+if(mark){ var tx=el("text",{x:p.x,y:p.y+4,"text-anchor":"middle","font-size":(t==="summit"||t==="hill126")?10:12,fill:"rgba(20,20,10,.55)","pointer-events":"none"}); tx.textContent=mark; svg.appendChild(tx);}
+if(isTunnel(c,r)){
+var grp=el("g",{"pointer-events":"none"});
+var cir=el("circle",{cx:p.x,cy:p.y-13,r:6,fill:"#222",stroke:"#ffd94d","stroke-width":1.6});
+var tt2=el("text",{x:p.x,y:p.y-9.5,"text-anchor":"middle","font-size":8,fill:"#ffd94d"}); tt2.textContent="\u5751";
+grp.appendChild(cir); grp.appendChild(tt2); svg.appendChild(grp); tuns[key(c,r)]={g:grp,cir:cir};
+}
+var isObj=SUMMIT_HEXES.some(function(h){return h.c===c&&h.r===r;})||REVERSE_HEXES.some(function(h){return h.c===c&&h.r===r;});
+if(isObj){ var dot=el("circle",{cx:p.x+15,cy:p.y-15,r:3.4,fill:"#2b7ea6",stroke:"#fff","stroke-width":1,"pointer-events":"none"}); svg.appendChild(dot); dots[key(c,r)]=dot;}
+}
+var dyn=el("g",{}); svg.appendChild(dyn);
+svg.addEventListener("click",function(ev){
+if(!G)return;
+var t=ev.target;
+var uidEl=(t.closest)?t.closest("[data-uid]"):null;
+if(uidEl){ var id=parseInt(uidEl.getAttribute("data-uid"),10); for(var i=0;i<G.units.length;i++){ if(G.units[i].id===id){ onUnitClick(G.units[i]); return; } } }
+if(t.getAttribute&&t.getAttribute("data-c")!==null&&t.getAttribute("data-c")!==undefined){ onHexClick(ev); }
+});
+box.appendChild(svg);
+mapBase={svg:svg,polys:polys,dots:dots,tuns:tuns,dyn:dyn};
+}
+function render(){
+if(!G)return;
+var chips=document.getElementById("statusChips");
+var sideName=G.player==="atk"?"\u30cd\u30b9\u30e1\u30eb\u30bd\u30f3\u8ecd\uFF08\u653b\u52e2\uFF09":"\u6d77\u8ecd\u653f\u5e9c\u8ecd\uFF08\u5b88\u5099\uFF09";
+chips.innerHTML="";
+[["\u7b2c"+G.week+"\u9031", ""],["\u30bf\u30fc\u30f3 "+G.turn+" / "+(14*G.week),""],[turnDate(),""],[isNight()?"\u{1F319} \u591c\u30bf\u30fc\u30f3":"\u2600 \u663c\u30bf\u30fc\u30f3", isNight()?"night":"day"]].concat(isNight()?[["\u{1F319}\u591c\u8972\uff1a\u767d\u5175\u00d71.5\uff0f\u8fd1\u63a5\u00d71.3\uff0f\u8089\u8584\u6210\u529f\u738768%","raid"]]:[]).concat([["\u3042\u306a\u305f\uFF1a"+sideName,""],["\u8266 "+G.ships+"\u96bb / \u8266\u7832\u6b8b "+(2-G.navalUsed),""]]).forEach(function(ch){
+var sp=document.createElement("span"); sp.className="chip "+ch[1]; sp.textContent=ch[0]; chips.appendChild(sp);
+});
+document.querySelectorAll(".navalLeft").forEach(function(e){e.textContent=(2-G.navalUsed);});
+document.querySelectorAll("[data-act=naval]").forEach(function(b){b.disabled=!(G.player==="def"&&!G.aiBusy);});
+document.querySelectorAll("[data-act=end]").forEach(function(b){b.disabled=G.aiBusy||G.over;});
+document.getElementById("cmdNote").textContent = G.player==="def"? "\u8266\u7832\u652f\u63f4\u306f1\u65e52\u56de\u307e\u3067\u3002\u5c71\u9802\u7a1c\u7dda\u3092\u8d8a\u3048\u305f\u6575\u306b\u9ad8\u7cbe\u5ea6\u3067\u547d\u4e2d\u3057\u307e\u3059\u3002": "\u6226\u8eca\u4e2d\u968a\u306f10\u670810\u65e5\uFF08\u30bf\u30fc\u30f37\uFF09\u304b\u3089\u6295\u5165\u53ef\u80fd\u3002\u53cd\u659c\u9762\u306b\u306f\u7832\u6483\u304c\u5c4a\u304d\u306b\u304f\u3044\u2015\u2015\u767d\u5175\u3067\u6295\u304f\u3057\u304b\u306a\u3044\u3002";
+if(!mapBase)buildMapBase();
+var reach = (G.selected&&G.selected.side===G.player&&canMove(G.selected)&&!G.aiBusy)?reachable(G.selected):{};
+var selRange = (G.selected&&G.selected.side===G.player)?effRange(G.selected):0;
+var night=isNight();
+for(var r=0;r<ROWS;r++)for(var c=0;c<COLS;c++){
+var t=terrainAt(c,r), tt=TERRAIN[t], k=key(c,r), poly=mapBase.polys[k];
+var isReach=!!reach[k];
+var enemyInRange=false;
+if(G.selected&&G.selected.side===G.player&&!G.selected.acted){
+var occ0=unitAt(c,r);
+if(occ0&&occ0.side!==G.player&&!occ0.locked&&hexDist(G.selected,occ0)<=selRange)enemyInRange=true;
+if(G.selected.indirect&&occ0&&occ0.side!==G.player&&hexDist(G.selected,occ0)<=8)enemyInRange=true;
+}
+poly.setAttribute("fill",night?tt.dark:tt.color);
+poly.setAttribute("stroke",isReach?"#ffd94d":(enemyInRange?"#e0483a":"rgba(30,30,20,.45)"));
+poly.setAttribute("stroke-width",isReach||enemyInRange?2.6:1);
+poly.setAttribute("fill-opacity",isReach?"0.82":"1");
+if(mapBase.dots[k])mapBase.dots[k].setAttribute("fill",G.control[k]==="atk"?"#c23b22":"#2b7ea6");
+if(mapBase.tuns[k]){ mapBase.tuns[k].g.setAttribute("display",G.showTunnel?"":"none"); mapBase.tuns[k].cir.setAttribute("fill",G.control[k]==="atk"?"#888":"#222"); }
+}
+var dyn=mapBase.dyn; dyn.innerHTML="";
+if(G.showTunnel){
+for(var i=0;i<TUNNELS.length-1;i++){ var a=hexXY(TUNNELS[i].c,TUNNELS[i].r),b=hexXY(TUNNELS[i+1].c,TUNNELS[i+1].r);
+dyn.appendChild(el("line",{x1:a.x,y1:a.y-13,x2:b.x,y2:b.y-13,stroke:"#ffd94d","stroke-width":1.4,"stroke-dasharray":"4 3",opacity:0.75,"pointer-events":"none"})); }
+}
+G.units.forEach(function(u){
+if(u.dead)return;
+var p=hexXY(u.c,u.r);
+var g=el("g",{style:"cursor:pointer","data-uid":u.id});
+var isSel=G.selected===u;
+var bg=u.side==="atk"?"#8c2f1b":"#1e4f66";
+if(u.locked)bg="#6d6d63";
+g.appendChild(el("rect",{x:p.x-15,y:p.y-11,width:30,height:22,rx:4,fill:bg,stroke:isSel?"#ffd94d":"#f2eedd","stroke-width":isSel?3:1.4,"data-uid":u.id}));
+var tx=el("text",{x:p.x,y:p.y+2,"text-anchor":"middle","font-size":12,"font-weight":"700",fill:"#fff","pointer-events":"none"}); tx.textContent=u.locked?"\u{1F512}":u.label; g.appendChild(tx);
+var bw=30*(Math.max(0,u.hp)/u.maxHp);
+g.appendChild(el("rect",{x:p.x-15,y:p.y+13,width:30,height:4,fill:"rgba(0,0,0,.4)","pointer-events":"none"}));
+g.appendChild(el("rect",{x:p.x-15,y:p.y+13,width:bw,height:4,fill:u.hp/u.maxHp>0.5?"#7fc46a":(u.hp/u.maxHp>0.25?"#e0b34d":"#e0483a"),"pointer-events":"none"}));
+var st="";
+if(u.blind>0)st+="\u76f2"; if(u.immob>0)st+="\u6b62"; if(u.routed)st+="\u6f70"; if(u.exposed)st+="\u9732";
+if(st){ var sx=el("text",{x:p.x,y:p.y-16,"text-anchor":"middle","font-size":9,"font-weight":"700",fill:"#ffe9a8","pointer-events":"none"}); sx.textContent=st; g.appendChild(sx);}
+if(u.acted&&u.side===G.player){ g.appendChild(el("rect",{x:p.x-15,y:p.y-11,width:30,height:22,rx:4,fill:"rgba(20,20,20,.38)","pointer-events":"none"})); }
+dyn.appendChild(g);
+});
+document.getElementById("legend").innerHTML=
+'<span><i class="sw" style="background:#8c2f1b"></i>\u30cd\u30b9\u30e1\u30eb\u30bd\u30f3\u8ecd</span><span><i class="sw" style="background:#1e4f66"></i>\u6d77\u8ecd\u653f\u5e9c\u8ecd</span>'+
+'<span><i class="sw" style="background:#c2b280"></i>\u5c71\u9802</span><span><i class="sw" style="background:#7d8464"></i>\u53cd\u659c\u9762</span><span><i class="sw" style="background:#6e6a4e"></i>\u5879\u58d5</span><span><i class="sw" style="background:#5d7350"></i>\u68ee\u6797</span><span><i class="sw" style="background:#cbbfa0"></i>\u8857\u9053</span><span>\u25cf\u76ee\u6a19\u30d8\u30af\u30b9\u306e\u5236\u5727\u5074\uFF08\u8d64=\u653b\u52e2\uFF0f\u9752=\u5b88\u5099\uFF09\uFF0f \u5751=\u30c8\u30f3\u30cd\u30eb\u5165\u53e3</span>';
+if(G.selected&&!G.selected.dead)renderSelPanel(G.selected); else renderSelPanel(); renderSit();
+}
+function personnelLost(side){
+var total=side==="atk"?26000:5800;
+return Math.round(G.hpLost[side]/Math.max(1,G.totalHp[side])*total);
+}
+function renderSit(){
+var atkAlive=aliveUnits("atk"),defAlive=aliveUnits("def");
+var atkHp=atkAlive.reduce(function(s,u){return s+u.hp;},0), defHp=defAlive.reduce(function(s,u){return s+u.hp;},0);
+var summit=controlCount(SUMMIT_HEXES,"atk"), revDef=controlCount(REVERSE_HEXES,"def"), tunAtk=TUNNELS.filter(function(t){return G.control[key(t.c,t.r)]==="atk";}).length;
+document.getElementById("sitBody").innerHTML=
+'<div class="kv"><span style="color:var(--atk);font-weight:700">ネスメルソン軍</span><b>残存 '+atkAlive.length+' 部隊</b></div>'+
+'<div class="bar"><i style="width:'+Math.round(atkHp/Math.max(1,G.totalHp.atk)*100)+'%;background:#8c2f1b"></i></div>'+
+'<div class="kv"><span>推定人的損害</span><b>約 '+personnelLost("atk").toLocaleString()+' 名</b></div>'+
+'<div class="kv"><span>戦車戦列離脱</span><b>'+tankVehiclesLostTotal()+' 両</b></div>'+
+'<div class="kv"><span style="color:var(--def);font-weight:700">海軍政府軍</span><b>残存 '+defAlive.length+' 部隊</b></div>'+
+'<div class="bar"><i style="width:'+Math.round(defHp/Math.max(1,G.totalHp.def)*100)+'%;background:#1e4f66"></i></div>'+
+'<div class="kv"><span>推定人的損害</span><b>約 '+personnelLost("def").toLocaleString()+' 名</b></div>'+
+'<hr style="border:none;border-top:1px solid var(--line)">'+
+'<div class="kv"><span>山頂制圧（攻勢側）</span><b>'+summit+' / '+SUMMIT_HEXES.length+'</b></div>'+
+'<div class="kv"><span>反斜面保持（守備側）</span><b>'+revDef+' / '+REVERSE_HEXES.length+'</b></div>'+
+'<div class="kv"><span>トンネル入口制圧（攻勢側）</span><b>'+tunAtk+' / 4</b></div>'+
+'<div class="kv"><span>港湾保持（守備側）</span><b>'+controlCount(PORT_HEXES,"def")+' / '+PORT_HEXES.length+'</b></div>';
+}
+function renderSelPanel(u,hexInfo){
+var body=document.getElementById("selBody");
+if(hexInfo&&!u){
+var t=TERRAIN[hexInfo.t]; var tun=isTunnel(hexInfo.c,hexInfo.r);
+body.innerHTML='<div class="unitname">'+t.name+' <span class="mini">（列'+(hexInfo.c+1)+'・行'+(hexInfo.r+1)+'）</span></div>'+
+'<div class="kv"><span>防御修正</span><b>'+(t.def>0?"+":"")+t.def+'%</b></div>'+
+'<div class="kv"><span>移動コスト</span><b>'+t.cost+'</b></div>'+
+'<div class="kv"><span>制圧</span><b>'+(G.control[key(hexInfo.c,hexInfo.r)]==="atk"?"ネスメルソン軍":"海軍政府軍")+'</b></div>'+
+(tun?'<p class="mini">トンネル入口「'+tun.id+'」。守備側はここから他入口へ砲撃を受けず移動できる。攻勢側に制圧されると封鎖される。</p>':"")+
+'<p class="mini">自軍ユニットをクリックすると詳細と行動コマンドが出ます。</p>';
+return;
+}
+if(!u){ body.innerHTML='<p class="mini">自軍ユニットを選択してください。ヘクスをクリックすると地形情報も表示されます。</p>'; return;}
+var badges="";
+if(u.blind>0)badges+='<span class="badge blind">盲目</span>';
+if(u.immob>0)badges+='<span class="badge stop">足止め '+u.immob+'</span>';
+if(u.routed)badges+='<span class="badge rout">潰走</span>';
+if(u.exposed)badges+='<span class="badge warn">無防備</span>';
+if(u.locked)badges+='<span class="badge warn">10月10日まで投入不可</span>';
+var own=u.side===G.player;
+var html='<div class="unitname" style="color:'+(u.side==="atk"?"var(--atk)":"var(--def)")+'">'+u.name+badges+'</div>'+
+'<div class="mini">'+u.full+'／'+(u.side==="atk"?"ネスメルソン軍":"海軍政府軍")+(u.type==="tank"?"／戦車 "+Math.max(0,Math.round(u.vehicles*(u.hp/u.maxHp)))+" 両":"")+'</div>'+
+'<div class="kv"><span>兵力HP</span><b>'+Math.max(0,Math.round(u.hp))+' / '+u.maxHp+'</b></div><div class="bar"><i style="width:'+Math.round(Math.max(0,u.hp)/u.maxHp*100)+'%;background:'+(u.side==="atk"?"#8c2f1b":"#1e4f66")+'"></i></div>'+
+'<div class="kv"><span>士気</span><b>'+Math.round(u.morale)+' / '+u.maxMorale+'</b></div><div class="bar"><i style="width:'+Math.round(u.morale)+'%;background:#9a7b2d"></i></div>'+
+'<div class="kv"><span>弾薬</span><b>'+Math.round(u.ammo)+'%</b></div>'+
+'<div class="kv"><span>疲労 / 制圧</span><b>'+Math.round(u.fatigue)+'% / '+Math.round(u.supp)+'%</b></div>'+
+'<div class="kv"><span>移動力 / 射程</span><b>'+u.baseMove+' / '+effRange(u)+(isNight()?"（夜間-1）":"")+'</b></div>'+
+'<div class="kv"><span>射撃力 / 白兵力</span><b>'+u.fire+(u.atFire?"（対戦車 "+u.atFire+"）":"")+' / '+u.melee+(isNight()?" → 夜襲時 "+Math.round(u.melee*NIGHT_MELEE_MULT):"")+'</b></div>'+ (isNight()?'<div class="kv"><span style="font-weight:700">🌙 夜襲ボーナス</span><b>白兵×1.5／近接射撃×1.3／肉薄68%</b></div>':"")+
+'<div class="kv"><span>現在地形</span><b>'+TERRAIN[terrainAt(u.c,u.r)].name+'（防御 '+(TERRAIN[terrainAt(u.c,u.r)].def>0?"+":"")+TERRAIN[terrainAt(u.c,u.r)].def+'%）</b></div>'+
+'<div class="kv"><span>状態</span><b>'+(u.dead?"壊滅":u.locked?"待機中":(canAct(u)?"行動可能":"行動済"))+'／'+(canMove(u)?"移動可能":"移動済")+'</b></div>';
+if(own&&!u.dead&&!G.aiBusy){
+html+='<div class="btnrow">'+
+'<button data-mode="shoot" class="'+(G.actionMode==="shoot"?"active":"")+'">射撃'+(u.indirect?"（間接砲撃）":"")+'</button>'+
+'<button data-mode="melee" class="'+(G.actionMode==="melee"?"active":"")+'">白兵戦'+(isNight()?" 🌙×1.5":"")+'</button>'+
+((u.type==="inf"||u.type==="infD"||u.type==="eng"||u.type==="engD")?'<button data-mode="antitank" class="'+(G.actionMode==="antitank"?"active":"")+'">肉薄攻撃（対戦車）'+(isNight()?" 🌙68%":"")+'</button>':"")+
+'</div><p class="mini">行動モードを選んでから、対象の敵ユニットをクリック。白兵・肉薄は隣接ヘクスのみ。移動はハイライトされたヘクスをクリック。</p>';
+}
+body.innerHTML=html;
+body.querySelectorAll("[data-mode]").forEach(function(b){ b.addEventListener("click",function(){ G.actionMode=b.getAttribute("data-mode"); renderSelPanel(G.selected); document.getElementById("modeHint").textContent="行動モード："+(G.actionMode==="shoot"?"射撃":G.actionMode==="melee"?"白兵戦":"肉薄攻撃")+" ― 対象の敵をクリックしてください。";});});
+}
+
+/* ============ 入力 ============ */
+function onUnitClick(u){
+if(!G||G.aiBusy)return;
+if(G.navalMode){ navalFireAt(u.c,u.r); return;}
+var sel=G.selected;
+if(sel&&sel.side===G.player&&u.side!==G.player&&canAct(sel)){
+tryAttack(sel,u); return;
+}
+if(u.side===G.player){ G.selected=u; G.actionMode="shoot"; render(); renderSelPanel(u);}
+else { renderSelPanel(u);}
+}
+function onHexClick(ev){
+if(!G||G.aiBusy)return;
+var c=parseInt(ev.target.getAttribute("data-c"),10), r=parseInt(ev.target.getAttribute("data-r"),10);
+if(G.navalMode){ navalFireAt(c,r); return;}
+var occ=unitAt(c,r);
+if(occ){ onUnitClick(occ); return;}
+var sel=G.selected;
+if(sel&&sel.side===G.player&&canMove(sel)){
+var reach=reachable(sel);
+if(reach[key(c,r)]){ moveUnit(sel,c,r,reach[key(c,r)].tunnel); addLog(sel.name+" が "+TERRAIN[terrainAt(c,r)].name+"（"+(c+1)+","+(r+1)+"）へ移動。",""); checkPortCapture(); render(); return;}
+}
+G.selected=null; render(); renderSelPanel(null,{c:c,r:r,t:terrainAt(c,r)});
+}
+function tryAttack(att,def){
+var dist=hexDist(att,def);
+if(G.actionMode==="melee"){
+if(dist!==1){ document.getElementById("modeHint").textContent="白兵戦は隣接ヘクスの敵にのみ可能です。"; return;}
+if(att.indirect){ document.getElementById("modeHint").textContent="砲兵は白兵戦を行えません。"; return;}
+doMelee(att,def);
+} else if(G.actionMode==="antitank"){
+if(def.type!=="tank"){ document.getElementById("modeHint").textContent="肉薄攻撃は戦車にのみ可能です。"; return;}
+if(dist!==1){ document.getElementById("modeHint").textContent="肉薄攻撃は隣接する戦車にのみ可能です。"; return;}
+doAntiTank(att,def);
+} else {
+var rng=att.indirect?8:effRange(att);
+if(dist>rng){ document.getElementById("modeHint").textContent="射程外です（射程 "+rng+"、距離 "+dist+"）。"; return;}
+if(att.ammo<=0){ document.getElementById("modeHint").textContent="弾薬切れです。補給フェイズまで射撃できません。"; return;}
+doShoot(att,def);
+}
+render();
+}
+function checkPortCapture(){
+// 港ヘクスに攻勢側が入ると艦に被害
+var atkOnPort=PORT_HEXES.filter(function(h){return G.control[key(h.c,h.r)]==="atk";}).length;
+if(atkOnPort>=4&&G.ships===2){ G.ships=1; addLog("⚠ 港湾地区への侵入で軽巡1隻が戦闘不能となった！ 残り1隻。","bad");}
+if(atkOnPort>=7&&G.ships===1){ G.ships=0; addLog("⚠⚠ 残る軽巡も失われた。艦砲支援は永久に失われた。","bad"); judgeWeek(false);}
+}
+
+/* ============ ボタン ============ */
+document.getElementById("pickAtk").addEventListener("click",function(){ document.getElementById("startOverlay").classList.add("hidden"); Snd.startBgm("atk"); newGame("atk"); render();});
+document.getElementById("pickDef").addEventListener("click",function(){ document.getElementById("startOverlay").classList.add("hidden"); Snd.startBgm("def"); newGame("def"); render();});
+document.getElementById("btnBgm").addEventListener("click",function(){
+Snd.init(); Snd.bgmOn=!Snd.bgmOn;
+this.textContent="♪ BGM："+(Snd.bgmOn?"入":"切"); this.classList.toggle("active",Snd.bgmOn); this.setAttribute("aria-pressed",Snd.bgmOn);
+if(Snd.bgmOn&&G&&!Snd.playing)Snd.startBgm(G.player);
+var chip=document.getElementById("bgmChip"); if(chip&&Snd.song)chip.textContent="♪ BGM：「"+Snd.song.title+"」"+(Snd.bgmOn?"再生中":"停止中");
+});
+document.getElementById("btnSe").addEventListener("click",function(){
+Snd.init(); Snd.seOn=!Snd.seOn;
+this.textContent="🔊 SE："+(Snd.seOn?"入":"切"); this.classList.toggle("active",Snd.seOn); this.setAttribute("aria-pressed",Snd.seOn);
+if(Snd.seOn)Snd.gunshot(false);
+});
+document.getElementById("btnCloseRules").addEventListener("click",function(){ document.getElementById("rulesOverlay").classList.add("hidden");});
+document.getElementById("rulesOverlay").addEventListener("click",function(ev){ if(ev.target===this)this.classList.add("hidden"); });
+document.addEventListener("keydown",function(ev){ if(ev.key==="Escape")document.getElementById("rulesOverlay").classList.add("hidden"); });
+document.addEventListener("click",function(ev){
+var b=ev.target.closest?ev.target.closest("[data-act]"):null; if(!b||b.disabled)return;
+var act=b.getAttribute("data-act");
+if(act==="end")endPlayerTurn();
+else if(act==="rules")document.getElementById("rulesOverlay").classList.remove("hidden");
+else if(act==="tunnel"){ if(G){G.showTunnel=!G.showTunnel; render();} }
+else if(act==="restart")location.reload();
+else if(act==="naval"){
+if(!G||G.player!=="def")return;
+if(2-G.navalUsed<=0){ document.getElementById("modeHint").textContent="本日の艦砲支援は使い切りました（1日2回まで）。"; return; }
+G.navalMode=true; document.getElementById("modeHint").textContent="艦砲支援：射撃するヘクス（敵ユニット）をクリックしてください。山頂稜線を越えた敵には高精度。";
+}
+});
+document.getElementById("btnEndRestart").addEventListener("click",function(){ location.reload();});
+function continueLongWar(){
+document.getElementById("endOverlay").classList.add("hidden");
+if(!G)return;
+if(G.turn<=14*G.week){ render(); return; }
+G.week++; G.turn=14*(G.week-1)+1; G.judged=false;
+addLog("＝＝ 長期戦 第"+G.week+"週 開始 ＝＝ 補給を受け、戦闘は続く。","hd");
+startTurnEffects(false); render();
+}
+document.getElementById("btnEndContinue").addEventListener("click",continueLongWar);
+document.getElementById("btnContinue").addEventListener("click",continueLongWar);
+</script>
+</body>
+</html>
